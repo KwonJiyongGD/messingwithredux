@@ -8,12 +8,26 @@ const initialState = [
     title: 'karina',
     content: 'babe',
     date: sub(new Date(), { minutes: 10 }).toISOString(),
+    reactions: {
+      thumbsUp: 0,
+      wow: 0,
+      heart: 0,
+      rocket: 0,
+      coffee: 0,
+    },
   },
   {
     id: '2',
     title: 'winter',
     content: 'lovely',
     date: sub(new Date(), { minutes: 5 }).toISOString(),
+    reactions: {
+      thumbsUp: 0,
+      wow: 0,
+      heart: 0,
+      rocket: 0,
+      coffee: 0,
+    },
   },
 ];
 
@@ -34,9 +48,23 @@ const postsSlice = createSlice({
             content,
             date: new Date().toISOString(),
             userId,
+            reactions: {
+              thumbsUp: 0,
+              wow: 0,
+              heart: 0,
+              rocket: 0,
+              coffee: 0,
+            },
           },
         };
       },
+    },
+    reactionAdded(state, action) {
+      const { postId, reaction } = action.payload;
+      const existingPost = state.find((post) => post.id === postId);
+      if (existingPost) {
+        existingPost.reactions[reaction]++;
+      }
     },
   },
 });
@@ -44,6 +72,6 @@ const postsSlice = createSlice({
 export const selectAllPosts = (state) => state.posts;
 //when we export our actions, we are actually exporting our actions creators function
 //that is why we do not see postsSlice.actions above.
-export const { postAdded } = postsSlice.actions;
+export const { postAdded, reactionAdded } = postsSlice.actions;
 
 export default postsSlice.reducer;
